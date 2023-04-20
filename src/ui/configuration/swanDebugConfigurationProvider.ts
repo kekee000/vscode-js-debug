@@ -47,14 +47,14 @@ export class SwanDebugConfigurationResolver
 
       config = fromContext;
     }
-
+    const isWindows = process.platform === 'win32';
     const newConfig = ((config as ISwanAttachConfiguration).debugTarget === 'renderer'
       ? {
           ...config,
           type: DebugType.Chrome,
           name: '调试小程序模板代码',
           request: 'attach',
-          urlFilter: '*/slaves/slaves.html?*',
+          urlFilter: isWindows ? '*\\slaves\\slaves.html?*' : '*/slaves/slaves.html?*',
           sourceMaps: true,
           perScriptSourcemaps: 'no',
           sourceMapPathOverrides: {
@@ -74,7 +74,7 @@ export class SwanDebugConfigurationResolver
         type: DebugType.Chrome,
         request: 'attach',
         name: '调试小程序代码',
-        urlFilter: '*/worker-container.html?*',
+        urlFilter: isWindows ? '*\\worker-container.html?*' : '*/worker-container.html?*',
         sourceMaps: true,
         perScriptSourcemaps: 'no',
         sourceMapPathOverrides: {
