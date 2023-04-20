@@ -132,7 +132,7 @@ const strings = {
   'debug.terminal.snippet.label': 'Run "npm start" in a debug terminal',
   'debug.terminal.welcome': `[JavaScript Debug Terminal](command:${Commands.CreateDebuggerTerminal})\n\nYou can use the JavaScript Debug Terminal to debug Node.js processes run on the command line.`,
   // 'debug.terminal.welcomeWithLink': `[JavaScript Debug Terminal](command:${Commands.CreateDebuggerTerminal})\n\nYou can use the JavaScript Debug Terminal to debug Node.js processes run on the command line.\n\n[Debug URL](command:${Commands.DebugLink})`,
-  'debug.terminal.welcomeWithLink': `[调试小程序代码](command:${Commands.DebugSmartProgram})\n\n使用 vscode 调试小程序 Javascript 代码，支持断点调试。`,
+  'debug.terminal.welcomeWithLink': `[调试小程序代码](command:${Commands.DebugSmartProgram})\n\n使用 vscode 调试小程序 Javascript 代码。`,
   'debug.terminal.toggleAuto': 'Toggle Terminal Node.js Auto Attach',
   'debug.terminal.attach': 'Attach to Node.js Terminal Process',
   'debug.unverifiedBreakpoints':
