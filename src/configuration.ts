@@ -982,11 +982,8 @@ export function applyChromeDefaults(
   config: ResolvingChromeConfiguration,
   browserLocation: 'workspace' | 'ui',
 ): AnyChromeConfiguration {
-  const debugTarget = 'master' as 'master' | 'renderer';
   return config.request === 'attach'
-    ? (config.type ===DebugType.Swan
-      ? {debugTarget, ...chromeAttachConfigDefaults, browserAttachLocation: browserLocation, ...config}
-      : {...chromeAttachConfigDefaults, browserAttachLocation: browserLocation, ...config})
+    ? {...chromeAttachConfigDefaults, browserAttachLocation: browserLocation, ...config}
     : {...chromeLaunchConfigDefaults, browserLaunchLocation: browserLocation, ...config};
 }
 

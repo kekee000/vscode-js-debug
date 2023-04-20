@@ -2,11 +2,12 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { swanideInExtension as swanide } from '@swanide/extension';
 import { injectable } from 'inversify';
 import * as vscode from 'vscode';
 import { DebugType } from '../../common/contributionUtils';
-import { isInSwanIDE } from '../../common/swanide';
+import { getProjectConfig, isInSwanIDE } from '../../common/swanide';
 import {
   AnyChromeConfiguration,
   IChromeAttachConfiguration,
@@ -17,6 +18,8 @@ import { BaseConfigurationProvider } from './baseConfigurationProvider';
 import {
   ChromiumDebugConfigurationResolver
 } from './chromiumDebugConfigurationProvider';
+
+const trimSlash = (s: string) => s.replace(/^\/+|\/+$/g, '');
 
 /**
  * Configuration provider for swan debugging.
@@ -47,8 +50,9 @@ export class SwanDebugConfigurationResolver
 
     const newConfig = ((config as ISwanAttachConfiguration).debugTarget === 'renderer'
       ? {
+          ...config,
+          type: DebugType.Chrome,
           name: '调试小程序模板代码',
-          type: 'chrome',
           request: 'attach',
           urlFilter: '*/slaves/slaves.html?*',
           sourceMaps: true,
@@ -85,16 +89,33 @@ export class SwanDebugConfigurationResolver
             '**/app.asar/**/*.js',
         ]
       }) as IChromeAttachConfiguration;
+
     await this.resolveBrowserCommon(folder, newConfig);
+
     if (isInSwanIDE()) {
-      if ((!newConfig.address || !config.port)) {
-        const debugHost = await swanide.getEnvironment<string>('app.remoteDebuggerHost');
-        if (!debugHost) {
-          throw new Error('no debug host connected');
+      const debugHost = await swanide.getEnvironment<string>('app.remoteDebuggerHost');
+      if (!debugHost) {
+        throw new Error('no debug host connected');
+      }
+      const {hostname, port} = new URL(debugHost);
+      newConfig.address = hostname;
+      newConfig.port = +port;
+      if (folder) {
+        const projectConfig = getProjectConfig(folder);
+        if (projectConfig.smartProgramRoot) {
+          const path = trimSlash(projectConfig.smartProgramRoot);
+          newConfig.sourceMapPathOverrides!['swan-source:///*'] = `\${workspaceFolder}/${path}/*`;
         }
-        const {hostname, port} = new URL(debugHost);
-        newConfig.address = hostname;
-        newConfig.port = +port;
+
+        if (projectConfig.dependencyRoot) {
+          const path = trimSlash(projectConfig.dependencyRoot);
+          newConfig.sourceMapPathOverrides!['swan-source:///__dep__/*'] = `\${workspaceFolder}/${path}/*`;
+        }
+
+        if (projectConfig.dynamicLibRoot) {
+          const path = trimSlash(projectConfig.dynamicLibRoot);
+          newConfig.sourceMapPathOverrides!['swan-source:///__dynamicLib__/*'] = `\${workspaceFolder}/${path}/*`;
+        }
       }
     }
 
