@@ -131,7 +131,8 @@ const strings = {
     'Command to run in the launched terminal. If not provided, the terminal will open without launching a program.',
   'debug.terminal.snippet.label': 'Run "npm start" in a debug terminal',
   'debug.terminal.welcome': `[JavaScript Debug Terminal](command:${Commands.CreateDebuggerTerminal})\n\nYou can use the JavaScript Debug Terminal to debug Node.js processes run on the command line.`,
-  'debug.terminal.welcomeWithLink': `[JavaScript Debug Terminal](command:${Commands.CreateDebuggerTerminal})\n\nYou can use the JavaScript Debug Terminal to debug Node.js processes run on the command line.\n\n[Debug URL](command:${Commands.DebugLink})`,
+  // 'debug.terminal.welcomeWithLink': `[JavaScript Debug Terminal](command:${Commands.CreateDebuggerTerminal})\n\nYou can use the JavaScript Debug Terminal to debug Node.js processes run on the command line.\n\n[Debug URL](command:${Commands.DebugLink})`,
+  'debug.terminal.welcomeWithLink': `[调试小程序代码](command:${Commands.DebugSmartProgram})\n\n使用 vscode 调试小程序 Javascript 代码，支持断点调试。`,
   'debug.terminal.toggleAuto': 'Toggle Terminal Node.js Auto Attach',
   'debug.terminal.attach': 'Attach to Node.js Terminal Process',
   'debug.unverifiedBreakpoints':
@@ -321,6 +322,9 @@ A common case to disable certificate verification can be done by passing \`{ "ht
   'commands.callersGoToTarget.label': 'Go to target location',
   'commands.enableSourceMapStepping.label': 'Enable Source Mapped Stepping',
   'commands.disableSourceMapStepping.label': 'Disable Source Mapped Stepping',
+  'debug.debug-smartprogram': '调试小程序代码',
+  'debug.debug-smartprogram-swan': '调试小程序模板代码',
+  'swan.label': '调试小程序',
 };
 
 export default strings;

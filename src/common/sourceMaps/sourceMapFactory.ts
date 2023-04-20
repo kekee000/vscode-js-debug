@@ -9,9 +9,9 @@ import {
   RawSection,
   RawSourceMap,
   SourceMapConsumer,
-  StartOfSourceMap,
+  StartOfSourceMap
 } from 'source-map';
-import { IResourceProvider } from '../../adapter/resourceProvider';
+import { IResourceProvider, Response } from '../../adapter/resourceProvider';
 import Dap from '../../dap/api';
 import { IRootDapApi } from '../../dap/connection';
 import { sourceMapParseFailed } from '../../dap/errors';
@@ -20,6 +20,7 @@ import { IDisposable } from '../disposable';
 import { ILogger, LogTag } from '../logging';
 import { truthy } from '../objUtils';
 import { ISourcePathResolver } from '../sourcePathResolver';
+import { isInSwanIDE, proxyFetchResource } from '../swanide';
 import { fileUrlToAbsolutePath, isDataUri } from '../urlUtils';
 import { ISourceMapMetadata, SourceMap } from './sourceMap';
 
@@ -203,7 +204,14 @@ export class SourceMapFactory implements ISourceMapFactory {
       absolutePath = this.pathResolve.rebaseRemoteToLocal(absolutePath);
     }
 
-    const content = await this.resourceProvider.fetch(absolutePath || sourceMapUrl);
+    const url = absolutePath || sourceMapUrl;
+    let content: Response<string>;
+    if (isInSwanIDE() && (url.startsWith('http://127.0.0.1') || url.startsWith('http://localhost'))) {
+      content = await proxyFetchResource(url) as Response<string>;
+    }
+    else {
+      content = await this.resourceProvider.fetch(url);
+    }
     if (!content.ok) {
       throw content.error;
     }

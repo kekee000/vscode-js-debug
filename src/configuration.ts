@@ -671,6 +671,14 @@ export interface IChromeAttachConfiguration extends IChromiumAttachConfiguration
 }
 
 /**
+ * Configuration to attach to a swan monitor instance.
+ */
+export interface ISwanAttachConfiguration extends IChromiumAttachConfiguration {
+  type: DebugType.Swan;
+  debugTarget?: 'master' | 'renderer';
+}
+
+/**
  * Fake 'attach' config used in the binder.
  */
 export interface IPseudoAttachConfiguration extends IMandatedConfiguration {
@@ -725,10 +733,10 @@ export type AnyNodeConfiguration =
   | IExtensionHostLaunchConfiguration
   | IExtensionHostAttachConfiguration
   | ITerminalDelegateConfiguration;
-export type AnyChromeConfiguration = IChromeAttachConfiguration | IChromeLaunchConfiguration;
+export type AnyChromeConfiguration = IChromeAttachConfiguration | IChromeLaunchConfiguration | ISwanAttachConfiguration;
 export type AnyEdgeConfiguration = IEdgeAttachConfiguration | IEdgeLaunchConfiguration;
 export type AnyChromiumLaunchConfiguration = IEdgeLaunchConfiguration | IChromeLaunchConfiguration;
-export type AnyChromiumAttachConfiguration = IEdgeAttachConfiguration | IChromeAttachConfiguration;
+export type AnyChromiumAttachConfiguration = IEdgeAttachConfiguration | IChromeAttachConfiguration | ISwanAttachConfiguration;
 export type AnyChromiumConfiguration = AnyEdgeConfiguration | AnyChromeConfiguration;
 export type AnyLaunchConfiguration = AnyChromiumConfiguration | AnyNodeConfiguration;
 export type AnyTerminalConfiguration =
@@ -895,6 +903,12 @@ export const chromeAttachConfigDefaults: IChromeAttachConfiguration = {
   perScriptSourcemaps: 'auto',
 };
 
+export const swanAttachConfigDefaults: ISwanAttachConfiguration = {
+  ...chromeAttachConfigDefaults,
+  type: DebugType.Swan,
+  debugTarget: 'master',
+};
+
 export const edgeAttachConfigDefaults: IEdgeAttachConfiguration = {
   ...chromeAttachConfigDefaults,
   type: DebugType.Edge,
@@ -968,9 +982,12 @@ export function applyChromeDefaults(
   config: ResolvingChromeConfiguration,
   browserLocation: 'workspace' | 'ui',
 ): AnyChromeConfiguration {
+  const debugTarget = 'master' as 'master' | 'renderer';
   return config.request === 'attach'
-    ? { ...chromeAttachConfigDefaults, browserAttachLocation: browserLocation, ...config }
-    : { ...chromeLaunchConfigDefaults, browserLaunchLocation: browserLocation, ...config };
+    ? (config.type ===DebugType.Swan
+      ? {debugTarget, ...chromeAttachConfigDefaults, browserAttachLocation: browserLocation, ...config}
+      : {...chromeAttachConfigDefaults, browserAttachLocation: browserLocation, ...config})
+    : {...chromeLaunchConfigDefaults, browserLaunchLocation: browserLocation, ...config};
 }
 
 export function applyEdgeDefaults(
@@ -1019,6 +1036,7 @@ export function applyDefaults(
       configWithDefaults = applyEdgeDefaults(config, defaultBrowserLocation);
       break;
     case DebugType.Chrome:
+    case DebugType.Swan:
       configWithDefaults = applyChromeDefaults(config, defaultBrowserLocation);
       break;
     case DebugType.ExtensionHost:
@@ -1129,6 +1147,7 @@ export const breakpointLanguages: ReadonlyArray<string> = [
   'javascriptreact',
   'fsharp',
   'html',
+  'swan',
 ];
 
 export const packageName: string = pkg.name;

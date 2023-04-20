@@ -71,7 +71,9 @@ export class WebSocketTransport implements ITransport {
   constructor(ws: WebSocket) {
     this._ws = ws;
     this._ws.addEventListener('message', event => {
-      this.messageEmitter.fire([event.data.toString('utf-8'), new HrTime()]);
+      const data = event.data.toString('utf-8');
+      console.log(data);
+      this.messageEmitter.fire([data, new HrTime()]);
     });
     this._ws.addEventListener('close', () => {
       this.endEmitter.fire();
@@ -86,6 +88,7 @@ export class WebSocketTransport implements ITransport {
    * @inheritdoc
    */
   send(message: string) {
+    console.log(message);
     this._ws?.send(message);
   }
 

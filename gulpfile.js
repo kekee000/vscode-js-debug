@@ -263,6 +263,7 @@ async function runWebpack({
 gulp.task('package:webpack-bundle', async () => {
   const packages = [
     { entry: `${buildSrcDir}/extension.js`, filename: 'extension.js', library: true },
+    { entry: `${buildSrcDir}/widget.js`, filename: 'widget.js', library: true },
   ];
   return runWebpack({ packages });
 });

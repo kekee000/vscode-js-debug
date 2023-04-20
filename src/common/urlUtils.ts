@@ -484,7 +484,7 @@ export const createTargetFilterForConfig = (
 export const requirePageTarget =
   <T>(filter: (t: T) => boolean): ((t: T & { type: string }) => boolean) =>
   t =>
-    t.type === BrowserTargetType.Page && filter(t);
+    (t.type === BrowserTargetType.Page || t.type === BrowserTargetType.Webview) && filter(t);
 
 /**
  * The "isURL" from chrome-debug-core. In js-debug we use `new URL()` to see

@@ -9,8 +9,9 @@ import {
   Commands,
   DebugType,
   preferredDebugTypes,
-  registerCommand,
+  registerCommand
 } from './common/contributionUtils';
+import { registerDebugSmartProgramCommand } from './common/swanide';
 import { extensionId } from './configuration';
 import { createGlobalContainer } from './ioc';
 import { IExtensionContribution } from './ioc-extras';
@@ -99,6 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
   registerRevealPage(context, debugSessionTracker);
   registerRequestCDPProxy(context, debugSessionTracker);
   services.getAll<IExtensionContribution>(IExtensionContribution).forEach(c => c.register(context));
+  registerDebugSmartProgramCommand(context);
 }
 
 export function deactivate() {

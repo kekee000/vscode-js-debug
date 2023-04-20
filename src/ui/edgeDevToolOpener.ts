@@ -18,7 +18,7 @@ const qualifies = (session: vscode.DebugSession) => {
   }
 
   const type: BrowserTargetType = session.configuration.__browserTargetType;
-  return type === BrowserTargetType.IFrame || type === BrowserTargetType.Page;
+  return type === BrowserTargetType.IFrame || type === BrowserTargetType.Webview || type === BrowserTargetType.Page;
 };
 
 const toolExtensionId = 'ms-edgedevtools.vscode-edge-devtools';

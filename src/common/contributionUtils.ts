@@ -7,7 +7,7 @@ import type { Command, commands, ConfigurationTarget, workspace, WorkspaceFolder
 import type {
   IChromeLaunchConfiguration,
   INodeAttachConfiguration,
-  ITerminalLaunchConfiguration,
+  ITerminalLaunchConfiguration
 } from '../configuration';
 import type Dap from '../dap/api';
 import type { IAutoAttachInfo } from '../targets/node/bootloader/environment';
@@ -47,6 +47,8 @@ export const enum Commands {
   StopProfile = 'extension.js-debug.stopProfile',
   ToggleSkipping = 'extension.js-debug.toggleSkippingFile',
   OpenEdgeDevTools = 'extension.js-debug.openEdgeDevTools',
+  DebugSmartProgram = 'swanide.debug-smart-program-in-vscode',
+  DebugSmartProgramSwan = 'swanide.debug-smart-program-swan-in-vscode',
   DisableSourceMapStepping = 'extension.js-debug.disableSourceMapStepping',
   EnableSourceMapStepping = 'extension.js-debug.enableSourceMapStepping',
   //#region Excluded callers view
@@ -74,6 +76,7 @@ export const enum DebugType {
   Node = 'pwa-node',
   Chrome = 'pwa-chrome',
   Edge = 'pwa-msedge',
+  Swan = 'pwa-swan',
 }
 
 // constructing it this way makes sure we can't forget to add a type:
@@ -83,6 +86,7 @@ const debugTypes: { [K in DebugType]: null } = {
   [DebugType.Node]: null,
   [DebugType.Chrome]: null,
   [DebugType.Edge]: null,
+  [DebugType.Swan]: null,
 };
 
 const commandsObj: { [K in Commands]: null } = {
@@ -107,6 +111,8 @@ const commandsObj: { [K in Commands]: null } = {
   [Commands.StartWithStopOnEntry]: null,
   [Commands.RequestCDPProxy]: null,
   [Commands.OpenEdgeDevTools]: null,
+  [Commands.DebugSmartProgram]: null,
+  [Commands.DebugSmartProgramSwan]: null,
   [Commands.CallersAdd]: null,
   [Commands.CallersGoToCaller]: null,
   [Commands.CallersGoToTarget]: null,
@@ -209,7 +215,8 @@ export interface ICommandTypes {
     forwardToUi?: boolean,
   ): { host: string; port: number; path: string } | undefined;
   [Commands.OpenEdgeDevTools](): void;
-
+  [Commands.DebugSmartProgram](): void;
+  [Commands.DebugSmartProgramSwan](): void;
   [Commands.CallersAdd](uri: string, context: IStackFrameContext): void;
   [Commands.CallersGoToCaller](caller: ExcludedCaller): void;
   [Commands.CallersGoToTarget](caller: ExcludedCaller): void;

@@ -13,7 +13,7 @@ import {
   CustomViews,
   DebugType,
   IConfigurationTypes,
-  preferredDebugTypes,
+  preferredDebugTypes
 } from '../common/contributionUtils';
 import { knownToolToken } from '../common/knownTools';
 import { mapValues, sortKeys, walkObject } from '../common/objUtils';
@@ -37,13 +37,15 @@ import {
   INodeAttachConfiguration,
   INodeBaseConfiguration,
   INodeLaunchConfiguration,
+  ISwanAttachConfiguration,
   ITerminalLaunchConfiguration,
   KillBehavior,
   nodeAttachConfigDefaults,
   nodeLaunchConfigDefaults,
   OutputSource,
   ResolvingConfiguration,
-  terminalBaseDefaults,
+  swanAttachConfigDefaults,
+  terminalBaseDefaults
 } from '../configuration';
 import strings from './strings';
 
@@ -887,6 +889,27 @@ const chromeAttachConfig: IDebugger<IChromeAttachConfiguration> = {
   defaults: chromeAttachConfigDefaults,
 };
 
+
+const swanAttachConfig: IDebugger<ISwanAttachConfiguration> = {
+  type: DebugType.Swan,
+  request: 'attach',
+  label: refString('swan.label'),
+  languages: [...browserLanguages, 'json'],
+  configurationSnippets: [
+    {
+      label: refString('swan.label'),
+      description: refString('chrome.attach.description'),
+      body: {
+        name: '调试小程序代码',
+        type: DebugType.Swan,
+        request: 'attach',
+      },
+    },
+  ],
+  configurationAttributes: chromiumAttachConfigurationAttributes,
+  defaults: swanAttachConfigDefaults,
+};
+
 const extensionHostConfig: IDebugger<IExtensionHostLaunchConfiguration> = {
   type: DebugType.ExtensionHost,
   request: 'launch',
@@ -1019,6 +1042,7 @@ const edgeAttachConfig: IDebugger<IEdgeAttachConfiguration> = {
 };
 
 export const debuggers = [
+  swanAttachConfig,
   nodeAttachConfig,
   nodeLaunchConfig,
   nodeTerminalConfiguration,
@@ -1306,6 +1330,16 @@ const commands: ReadonlyArray<{
     title: refString('commands.disableSourceMapStepping.label'),
     icon: '$(compass)',
   },
+  {
+    command: Commands.DebugSmartProgram,
+    title: refString('debug.debug-smartprogram'),
+    category: 'Debug',
+  },
+  // {
+  //   command: Commands.DebugSmartProgramSwan,
+  //   title: refString('debug.debug-smartprogram-swan'),
+  //   category: 'Debug',
+  // },
 ];
 
 const menus: Menus = {
@@ -1518,7 +1552,7 @@ const viewsWelcome = [
   {
     view: 'debug',
     contents: refString('debug.terminal.welcomeWithLink'),
-    when: forSomeContextKeys(commonLanguages, 'debugStartLanguage', '!isWeb'),
+    when: forSomeContextKeys(browserLanguages, 'debugStartLanguage', '!isWeb'),
   },
   {
     view: 'debug',

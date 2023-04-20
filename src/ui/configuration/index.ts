@@ -17,6 +17,7 @@ import {
   NodeInitialDebugConfigurationProvider,
 } from './nodeDebugConfigurationProvider';
 import { NodeConfigurationResolver } from './nodeDebugConfigurationResolver';
+import { SwanDebugConfigurationProvider, SwanDebugConfigurationResolver } from './swanDebugConfigurationProvider';
 import { TerminalDebugConfigurationResolver } from './terminalDebugConfigurationResolver';
 
 export const allConfigurationResolvers = [
@@ -25,6 +26,7 @@ export const allConfigurationResolvers = [
   ExtensionHostConfigurationResolver,
   NodeConfigurationResolver,
   TerminalDebugConfigurationResolver,
+  SwanDebugConfigurationResolver,
 ];
 
 export const allConfigurationProviders = [
@@ -32,4 +34,5 @@ export const allConfigurationProviders = [
   EdgeDebugConfigurationProvider,
   NodeInitialDebugConfigurationProvider,
   NodeDynamicDebugConfigurationProvider,
+  SwanDebugConfigurationProvider,
 ];

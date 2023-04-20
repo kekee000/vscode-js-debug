@@ -18,6 +18,7 @@ export const enum BrowserTargetType {
   Worker = 'worker',
   IFrame = 'iframe',
   Other = 'other',
+  Webview = 'webview',
 }
 
 /**
@@ -28,6 +29,7 @@ export const jsTypes: ReadonlySet<BrowserTargetType> = new Set([
   BrowserTargetType.IFrame,
   BrowserTargetType.Worker,
   BrowserTargetType.ServiceWorker,
+  BrowserTargetType.Webview,
 ]);
 
 /**
@@ -36,6 +38,7 @@ export const jsTypes: ReadonlySet<BrowserTargetType> = new Set([
 export const domDebuggerTypes: ReadonlySet<BrowserTargetType> = new Set([
   BrowserTargetType.Page,
   BrowserTargetType.IFrame,
+  BrowserTargetType.Webview,
 ]);
 
 /**
@@ -44,6 +47,7 @@ export const domDebuggerTypes: ReadonlySet<BrowserTargetType> = new Set([
 const restartableTypes: ReadonlySet<BrowserTargetType> = new Set([
   BrowserTargetType.Page,
   BrowserTargetType.IFrame,
+  BrowserTargetType.Webview,
 ]);
 
 /**

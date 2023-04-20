@@ -67,7 +67,7 @@ export class VSCodeRendererTargetManager extends BrowserTargetManager {
       }
     }
 
-    if (debugWebviews && target.type === BrowserTargetType.IFrame && this.baseFilter(target)) {
+    if (debugWebviews && (target.type === BrowserTargetType.IFrame || target.type === BrowserTargetType.Webview) && this.baseFilter(target)) {
       return true;
     }
 
@@ -122,7 +122,7 @@ export class VSCodeRendererTargetManager extends BrowserTargetManager {
       false,
     );
 
-    if (targetInfo.type === BrowserTargetType.IFrame) {
+    if (targetInfo.type === BrowserTargetType.IFrame || targetInfo.type === BrowserTargetType.Webview) {
       target.setComputeNameFn(computeWebviewName);
     }
 

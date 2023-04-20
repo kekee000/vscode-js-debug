@@ -55,7 +55,7 @@ import { OutFiles, VueComponentPaths } from './common/fileGlobList';
 import { IFsUtils, LocalAndRemoteFsUtils, LocalFsUtils } from './common/fsUtils';
 import { ILogger } from './common/logging';
 import { Logger } from './common/logging/logger';
-import { createMutableLaunchConfig, MutableLaunchConfig } from './common/mutableLaunchConfig';
+import { MutableLaunchConfig, createMutableLaunchConfig } from './common/mutableLaunchConfig';
 import { CodeSearchStrategy } from './common/sourceMaps/codeSearchStrategy';
 import { IRenameProvider, RenameProvider } from './common/sourceMaps/renameProvider';
 import { CachingSourceMapFactory, ISourceMapFactory } from './common/sourceMaps/sourceMapFactory';
@@ -75,8 +75,8 @@ import {
   ProcessEnv,
   SessionSubStates,
   StoragePath,
-  trackDispose,
   VSCodeApi,
+  trackDispose,
 } from './ioc-extras';
 import { BrowserAttacher } from './targets/browser/browserAttacher';
 import { ChromeLauncher } from './targets/browser/chromeLauncher';
